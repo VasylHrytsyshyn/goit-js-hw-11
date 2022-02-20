@@ -16,7 +16,7 @@ searchFormInput.addEventListener('input', (e) => {
     e.preventDefault();
     queryName = e.target.value.trim();
 });
-
+//--------------------
 searchFormButton.addEventListener('click', (e) => {
     e.preventDefault();
     loadMoreBtn.classList.add("load-more-hidden");
