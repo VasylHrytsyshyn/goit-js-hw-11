@@ -1,4 +1,4 @@
-import './css/styles.css';
+import './css/styles';
 import { renderPrimaryMurkup } from './js/renderPrimaryMurkup.js';
 import { getPictures, perPageValue } from './js/getPictures.js';
 import { Notify } from 'notiflix';
@@ -12,7 +12,6 @@ let queryName = null;
 let numberPage = 1;
 loadMoreBtn.classList.add("load-more-hidden");
 
-
 searchFormInput.addEventListener('input', (e) => {
     e.preventDefault();
     queryName = e.target.value.trim();
@@ -20,10 +19,11 @@ searchFormInput.addEventListener('input', (e) => {
 
 searchFormButton.addEventListener('click', (e) => {
     e.preventDefault();
+    loadMoreBtn.classList.add("load-more-hidden");
     cleanGalleryContainer();
     if (queryName) {
         numberPage = 1;
-        console.log(numberPage);
+
         getPictures(queryName, numberPage).then(response => {
             renderPrimaryMurkup(response);
             if (response.hits.length === 40) {
@@ -43,7 +43,6 @@ loadMoreBtn.addEventListener('click', (e) => {
     if (queryName) {
         numberPage += 1;
         
-        console.log(numberPage);
         getPictures(queryName, numberPage).then(response => {
             const totalPages = Math.ceil(response.totalHits / perPageValue);
             if (numberPage === totalPages) {
@@ -58,4 +57,6 @@ loadMoreBtn.addEventListener('click', (e) => {
 
 function cleanGalleryContainer() {
     galleryContainer.innerHTML = '';
-}
+};
+
+    

@@ -1,4 +1,8 @@
 import { galleryContainer } from '../index.js'
+// Описан в документации
+import SimpleLightbox from 'simplelightbox';
+// Дополнительный импорт стилей
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 export function renderPrimaryMurkup(response) {
     console.log(response.hits)
@@ -28,4 +32,14 @@ export function renderPrimaryMurkup(response) {
                 </div>`
     }).join('');
     galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
+
+    const lightboxOptions = {
+    overlayOpacity: 1,
+    captions: true,
+    captionsData: 'alt',
+    captionPosition: 'top',
+    };
+
+    let gallery = new SimpleLightbox('.gallery a', lightboxOptions); 
+    gallery.refresh();
 };
