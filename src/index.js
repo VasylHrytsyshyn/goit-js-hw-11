@@ -2,14 +2,25 @@ import './css/styles';
 import { renderPrimaryMurkup } from './js/renderPrimaryMurkup.js';
 import { getPictures, perPageValue } from './js/getPictures.js';
 import { Notify } from 'notiflix';
+// Описан в документации
+import SimpleLightbox from 'simplelightbox';
+// Дополнительный импорт стилей
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const searchFormInput = document.querySelector('#search-form > input');
 const searchFormButton = document.querySelector('#search-form > button');
 const loadMoreBtn = document.querySelector('.load-more')
 export const galleryContainer = document.querySelector('.gallery')
 
+const lightboxOptions = {
+    overlayOpacity: 1,
+    captions: true,
+    captionsData: 'alt',
+    captionPosition: 'top',
+};
 let queryName = null;
 let numberPage = 1;
+let gallery = null;
 loadMoreBtn.classList.add("load-more-hidden");
 
 searchFormInput.addEventListener('input', (e) => {
@@ -17,7 +28,11 @@ searchFormInput.addEventListener('input', (e) => {
     queryName = e.target.value.trim();
 });
 //--------------------
-searchFormButton.addEventListener('click', (e) => {
+searchFormButton.addEventListener('click', onSearchSubmit);
+
+loadMoreBtn.addEventListener('click', onLoadMore);
+
+function onSearchSubmit (e) {
     e.preventDefault();
     loadMoreBtn.classList.add("load-more-hidden");
     cleanGalleryContainer();
@@ -26,6 +41,7 @@ searchFormButton.addEventListener('click', (e) => {
 
         getPictures(queryName, numberPage).then(response => {
             renderPrimaryMurkup(response);
+            gallery = new SimpleLightbox('.gallery a', lightboxOptions).refresh(); 
             if (response.hits.length === 40) {
                 loadMoreBtn.classList.remove("load-more-hidden");
             };
@@ -36,9 +52,9 @@ searchFormButton.addEventListener('click', (e) => {
             };
         }).catch(e => console.log(e))
     }
-});
+}
 
-loadMoreBtn.addEventListener('click', (e) => {
+function onLoadMore (e) {
     e.preventDefault();
     if (queryName) {
         numberPage += 1;
@@ -50,13 +66,12 @@ loadMoreBtn.addEventListener('click', (e) => {
                 loadMoreBtn.classList.add("load-more-hidden");
             }
             renderPrimaryMurkup(response);
+            gallery = new SimpleLightbox('.gallery a', lightboxOptions).refresh(); 
 
         }).catch(e => console.log(e))
     }
-});
+}
 
 function cleanGalleryContainer() {
     galleryContainer.innerHTML = '';
 };
-
-    
